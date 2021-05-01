@@ -1,0 +1,4 @@
+LOW=0x04
+HIGH=0xD7
+
+CKSEL=0100 (Internal clock 8MHz)
