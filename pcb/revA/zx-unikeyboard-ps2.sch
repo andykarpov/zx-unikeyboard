@@ -41,7 +41,7 @@ U 1 1 608C1911
 P 8200 5000
 F 0 "J4" H 8280 5042 50  0000 L CNN
 F 1 "PS/2" H 8280 4951 50  0000 L CNN
-F 2 "Connector_PinSocket_2.00mm:PinSocket_1x05_P2.00mm_Horizontal" H 8200 5000 50  0001 C CNN
+F 2 "Connector_JST:JST_PH_S5B-PH-K_1x05_P2.00mm_Horizontal" H 8200 5000 50  0001 C CNN
 F 3 "~" H 8200 5000 50  0001 C CNN
 	1    8200 5000
 	1    0    0    -1  
@@ -662,10 +662,6 @@ Wire Wire Line
 	8900 1550 9050 1550
 Text Label 7600 1550 0    50   ~ 0
 AVR_SS
-Wire Bus Line
-	7500 1300 7500 5600
-Wire Bus Line
-	5900 1300 5900 5150
 $Comp
 L Mechanical:MountingHole H1
 U 1 1 60A3BAE8
@@ -699,4 +695,8 @@ F 3 "~" H 3300 5800 50  0001 C CNN
 	1    3300 5800
 	1    0    0    -1  
 $EndComp
+Wire Bus Line
+	7500 1300 7500 5600
+Wire Bus Line
+	5900 1300 5900 5150
 $EndSCHEMATC
