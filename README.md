@@ -12,4 +12,4 @@ Unikeyboard ps/2 controller lets you connect any laptop or desktop keyboard matr
 scan its keypresses to collect the pins interaction (AVR-Keyexplorer module), build an array of its keys and then "learn" 
 a controller firmware (avr_kbd_ps2) to convert your keyboard layout into standard ps/2 keyboard.
 
-![image](https://github.com/andykarpov/zx-unikeyboard-ps2/raw/master/docs/zx-unikeyboard-ps2-revA.png)
+![image](https://github.com/andykarpov/zx-unikeyboard-ps2/raw/main/docs/zx-unikeyboard-ps2-revA.png)
