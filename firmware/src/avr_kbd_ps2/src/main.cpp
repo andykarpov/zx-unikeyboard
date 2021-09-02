@@ -85,44 +85,16 @@ void kbd_event(uint8_t key, bool state)
     case KEY_LSHIFT: kbd_do(kbd.ScanCodes::LEFT_SHIFT, state); break;
     case KEY_LCTRL: kbd_do(kbd.ScanCodes::LEFT_CONTROL, state); break;
     case KEY_RSHIFT: kbd_do(kbd.ScanCodes::RIGHT_SHIFT, state); break;
-//    case KEY_RCTRL: kbd_do_special(kbd.SpecialScanCodes::RIGHT_CONTROL, state); break;
+    case KEY_RCTRL: kbd_do_special(kbd.SpecialScanCodes::RIGHT_CONTROL, state); break;
     case KEY_LALT: kbd_do(kbd.ScanCodes::LEFT_ALT, state); break;
     case KEY_RALT: kbd_do_special(kbd.SpecialScanCodes::RIGHT_ALT, state); break;
     case KEY_DELETE: kbd_do_special(kbd.SpecialScanCodes::DELETE, state); break;
-//    case KEY_INSERT: kbd_do_special(kbd.SpecialScanCodes::INSERT, state); break;
+    case KEY_INSERT: kbd_do_special(kbd.SpecialScanCodes::INSERT, state); break;
     case KEY_ACCENT: kbd_do(kbd.ScanCodes::ACCENT, state); break;
-    case KEY_UP: 
-      if (state) {
-        kbd_do_special(is_fn ? kbd.SpecialScanCodes::PAGE_UP : kbd.SpecialScanCodes::UP_ARROW, state); 
-      } else {
-        kbd_do_special(kbd.SpecialScanCodes::UP_ARROW, false);
-        kbd_do_special(kbd.SpecialScanCodes::PAGE_UP, false);
-      }
-    break;
-    case KEY_DOWN: 
-      if (state) {
-        kbd_do_special(is_fn ? kbd.SpecialScanCodes::PAGE_DOWN : kbd.SpecialScanCodes::DOWN_ARROW, state); 
-      } else {
-        kbd_do_special(kbd.SpecialScanCodes::DOWN_ARROW, false);
-        kbd_do_special(kbd.SpecialScanCodes::PAGE_DOWN, false);
-      }
-    break;
-    case KEY_LEFT: 
-      if (state) {
-        kbd_do_special(is_fn ? kbd.SpecialScanCodes::HOME : kbd.SpecialScanCodes::LEFT_ARROW, state); 
-      } else {
-        kbd_do_special(kbd.SpecialScanCodes::LEFT_ARROW, false);
-        kbd_do_special(kbd.SpecialScanCodes::HOME, false);
-      }
-    break;
-    case KEY_RIGHT: 
-      if (state) {
-        kbd_do_special(is_fn ? kbd.SpecialScanCodes::END : kbd.SpecialScanCodes::RIGHT_ARROW, state); 
-      } else {
-        kbd_do_special(kbd.SpecialScanCodes::RIGHT_ARROW, false);
-        kbd_do_special(kbd.SpecialScanCodes::END, false);
-      }
-    break;
+    case KEY_UP: kbd_do_special(kbd.SpecialScanCodes::UP_ARROW, state); break;
+    case KEY_DOWN: kbd_do_special(kbd.SpecialScanCodes::DOWN_ARROW, state); break;
+    case KEY_LEFT: kbd_do_special(kbd.SpecialScanCodes::LEFT_ARROW, state); break;
+    case KEY_RIGHT: kbd_do_special(kbd.SpecialScanCodes::RIGHT_ARROW, state); break;
     case KEY_ESC: kbd_do(kbd.ScanCodes::ESCAPE, state); break;
     case KEY_BACKSPACE: kbd_do(kbd.ScanCodes::BACKSPACE, state); break;
     case KEY_ENTER: kbd_do(kbd.ScanCodes::ENTER, state); break;
@@ -182,9 +154,17 @@ void kbd_event(uint8_t key, bool state)
     case KEY_QUOTE: kbd_do(kbd.ScanCodes::TICK_MARK, state); break;
     case KEY_SLASH: kbd_do(kbd.ScanCodes::SLASH, state); break;
     case KEY_BACKSLASH: kbd_do(kbd.ScanCodes::BACKSLASH, state); break;
-//    case KEY_PRTSCR: if (state) { kbd.keyboard_press_printscreen(); } else { kbd.keyboard_release_printscreen(); } break;
-//    case KEY_PAUSE: kbd.keyboard_pausebreak(); break;
+    case KEY_PRTSCR: if (state) { kbd.keyboard_press_printscreen(); } else { kbd.keyboard_release_printscreen(); } break;
+    case KEY_PAUSE: kbd.keyboard_pausebreak(); break;
     case KEY_CONTEXTMENU: kbd_do_special(kbd.SpecialScanCodes::MENUS, state); break;
+    case KEY_WINR: kbd_do_special(kbd.SpecialScanCodes::RIGHT_WIN, state); break;
+    case KEY_WINL: kbd_do_special(kbd.SpecialScanCodes::LEFT_WIN, state); break;
+    case KEY_PAGEUP: kbd_do_special(kbd.SpecialScanCodes::PAGE_UP, state); 
+    case KEY_PAGEDOWN: kbd_do_special(kbd.SpecialScanCodes::PAGE_DOWN, state); 
+    case KEY_HOME: kbd_do_special(kbd.SpecialScanCodes::HOME, state); 
+    case KEY_END: kbd_do_special(kbd.SpecialScanCodes::END, state); 
+    case KEY_NUMLOCK: kbd_do(kbd.ScanCodes::NUM_LOCK, state); break;
+    case KEY_SCRLOCK: kbd_do(kbd.ScanCodes::SCROLL_LOCK, state); break;
 
     // F keys
     case KEY_F1: kbd_do(kbd.ScanCodes::F1, state); break;
