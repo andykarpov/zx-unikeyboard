@@ -85,7 +85,7 @@ void kbd_event(uint8_t key, bool state)
     case KEY_LSHIFT: kbd_do(kbd.ScanCodes::LEFT_SHIFT, state); break;
     case KEY_LCTRL: kbd_do(kbd.ScanCodes::LEFT_CONTROL, state); break;
     case KEY_RSHIFT: kbd_do(kbd.ScanCodes::RIGHT_SHIFT, state); break;
-    case KEY_RCTRL: kbd_do_special(kbd.SpecialScanCodes::RIGHT_CONTROL, state); break;
+    //case KEY_RCTRL: kbd_do_special(kbd.SpecialScanCodes::RIGHT_CONTROL, state); break;
     case KEY_LALT: kbd_do(kbd.ScanCodes::LEFT_ALT, state); break;
     case KEY_RALT: kbd_do_special(kbd.SpecialScanCodes::RIGHT_ALT, state); break;
     case KEY_DELETE: kbd_do_special(kbd.SpecialScanCodes::DELETE, state); break;
