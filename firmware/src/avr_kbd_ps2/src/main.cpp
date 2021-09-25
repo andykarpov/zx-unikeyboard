@@ -31,9 +31,7 @@ uint8_t keyaddr_mapped[COLS_MAX][ROWS_MAX]; // mapped keyaddr array by col/row i
 bool matrix[MATRIX_SIZE]; // matrix of pressed keys
 
 PS2dev kbd(PIN_PB6, PIN_PB7);  // PS2dev object (PB6:data, PB7:clock)
-unsigned long tk = 0; // last time kbd was handled
 unsigned long tl = 0; // last time led was blinked
-unsigned long current = 0; // current timestamp
 bool is_fn = false; // is FN key pressed
 
 // methods declaration
@@ -88,7 +86,14 @@ void kbd_event(uint8_t key, bool state)
 //    case KEY_RCTRL: kbd_do_special(kbd.SpecialScanCodes::RIGHT_CONTROL, state); break;
     case KEY_LALT: kbd_do(kbd.ScanCodes::LEFT_ALT, state); break;
     case KEY_RALT: kbd_do_special(kbd.SpecialScanCodes::RIGHT_ALT, state); break;
-    case KEY_DELETE: kbd_do_special(kbd.SpecialScanCodes::DELETE, state); break;
+    case KEY_DELETE: 
+      if (state) {
+        kbd_do_special(is_fn ? kbd.SpecialScanCodes::INSERT : kbd.SpecialScanCodes::DELETE, state); 
+      } else {
+        kbd_do_special(kbd.SpecialScanCodes::INSERT, false);
+        kbd_do_special(kbd.SpecialScanCodes::DELETE, false);
+      }
+    break;
 //    case KEY_INSERT: kbd_do_special(kbd.SpecialScanCodes::INSERT, state); break;
     case KEY_ACCENT: kbd_do(kbd.ScanCodes::ACCENT, state); break;
     case KEY_UP: 
@@ -212,13 +217,13 @@ void setup_keyaddr_mapped()
     uint8_t thekey = keyaddr[i][0];
     // find col index
     for (uint8_t j=0; j<COLS_MAX; j++) {
-      if (keyaddr[i][1] == cols[j] || keyaddr[i][2] == cols[j]) {
+      if ((keyaddr[i][1] == cols[j]) || (keyaddr[i][2] == cols[j])) {
         col = j;
       }
     }
     // find row index
     for (uint8_t j=0; j<ROWS_MAX; j++) {
-      if (keyaddr[i][1] == rows[j] || keyaddr[i][2] == rows[j]) {
+      if ((keyaddr[i][1] == rows[j]) || (keyaddr[i][2] == rows[j])) {
         row = j;
       }
     }
@@ -234,30 +239,32 @@ void poll_matrix()
   //all keys polling cycle
   for (current_col = 0; current_col < COLS_MAX; current_col++) {
     
-    // set colcount to 0, other columns into Z state
+    // set columns into Z state
     for (i = 0; i < COLS_MAX; i++) {
-      if (i != current_col) {
-        pinMode(pins[cols[i]], INPUT_PULLUP);
-      } else {
-        pinMode(pins[cols[i]], OUTPUT);
-        digitalWrite(pins[cols[i]], LOW);
-      }
+      pinMode(pins[cols[i]], INPUT_PULLUP);
     }
 
+    // set current col to 0
+    pinMode(pins[cols[current_col]], OUTPUT);
+    digitalWrite(pins[cols[current_col]], LOW);
+    
     // reading rows (pressed key = 0)
     for (current_row = 0; current_row < ROWS_MAX; current_row++) {
+
       thekey = keyaddr_mapped[current_col][current_row];
-      if (!digitalRead(pins[rows[current_row]])) {
+
+      uint8_t pin = pins[rows[current_row]];
+      if (digitalRead(pin) == LOW) {
         // pressed key
-        if (matrix[thekey] != PRESSED) {
+        if ((matrix[thekey] != PRESSED)) {
             matrix[thekey] = PRESSED;
             // transmit press event
             kbd_event(thekey, PRESSED);
-            tl = current;
+            tl = millis();
         }
       } else {
         // released key
-        if (matrix[thekey] != RELEASED) {
+        if ((matrix[thekey] != RELEASED)) {
             matrix[thekey] = RELEASED;
             // transmit release event
             kbd_event(thekey, RELEASED);
@@ -270,8 +277,10 @@ void poll_matrix()
 // initial setup
 void setup()
 {
+#if DEBUG_MODE==1
   Serial.begin(115200);
   Serial.flush();
+#endif
 
   pinMode(LED1, OUTPUT);
   digitalWrite(LED1, HIGH);
@@ -285,7 +294,9 @@ void setup()
   // setup keyaddr_mapped array
   setup_keyaddr_mapped();
 
+#if DEBUG_MODE==1
   Serial.println(F("ZX unikeyboard PS/2 controller v1.0"));
+#endif
 
   // send the keyboard start up
   kbd.keyboard_init();
@@ -294,21 +305,16 @@ void setup()
 // main loop
 void loop()
 {
-  current = millis();
-
   unsigned char leds = 0;
 
   // ps/2 keyboard handle every 10ms
-  if (current - tk > 10) {
-    kbd.keyboard_handle(&leds);
-    tk = current;
-  }
+  kbd.keyboard_handle(&leds);
 
   // poll matrix
   poll_matrix();  
 
   // control led1
-  if (current - tl < 100) {
+  if (millis() - tl < 100) {
     digitalWrite(LED1, LOW);
   } else {
     digitalWrite(LED1, HIGH);

@@ -1,4 +1,4 @@
-#define DEBUG_MODE 1
+#define DEBUG_MODE 0
 #define PRESSED true
 #define RELEASED false
 #define MATRIX_SIZE 84

@@ -1,6 +1,6 @@
 // Header file for BK3001BA bluetooth keyboard matrix
 
-#define KEY_ESC 0
+#define KEY_ESC 78
 #define KEY_F1 1
 #define KEY_F2 2
 #define KEY_F3 3
@@ -79,7 +79,7 @@
 #define KEY_UP 76
 #define KEY_DOWN 77
 
-const uint8_t keyaddr[][3] =
+const uint8_t keyaddr[78][3] =
 {
 { KEY_ESC, 4, 9 },
 { KEY_F1, 7, 10 },
