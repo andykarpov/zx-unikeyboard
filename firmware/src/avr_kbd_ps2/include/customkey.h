@@ -1,4 +1,4 @@
-#define KEY_ESC 0
+#define KEY_ESC 78
 #define KEY_F1 1
 #define KEY_F2 2
 #define KEY_F3 3
