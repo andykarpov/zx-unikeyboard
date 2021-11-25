@@ -128,7 +128,7 @@ void kbd_event(uint8_t key, bool state)
         kbd_do_special(kbd.SpecialScanCodes::END, false);
       }
     break;
-    case KEY_ESC: kbd_do(kbd.ScanCodes::ESCAPE, false); break;
+    case KEY_ESC: kbd_do(kbd.ScanCodes::ESCAPE, state); break;
     case KEY_BACKSPACE: kbd_do(kbd.ScanCodes::BACKSPACE, state); break;
     case KEY_ENTER: kbd_do(kbd.ScanCodes::ENTER, state); break;
     case KEY_SPACE: kbd_do(kbd.ScanCodes::SPACE, state); break;
