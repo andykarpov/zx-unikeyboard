@@ -31,4 +31,4 @@
 #define IO24 PIN_PB1
 #define IO25 PIN_PB2
 #define IO26 PIN_PB3
-#define LED1 PIN_PB4
+#define IO27 PIN_PB4
