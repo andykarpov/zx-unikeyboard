@@ -195,35 +195,14 @@ void kbd_event(uint8_t key, bool state)
     case KEY_GUI: kbd_do_special(kbd.SpecialScanCodes::LEFT_WIN, state); break;
 
     // F keys
-    case KEY_F1: 
-      if (state) {
-        if (is_fn) {
-          kbd.keyboard_press_printscreen();
-        } else {
-          kbd_do(kbd.ScanCodes::F1, state); 
-        }
-      } else {
-        kbd_do(kbd.ScanCodes::F1, false);
-        kbd.keyboard_release_printscreen();
-      }
-    break;
+    case KEY_F1: kbd_do(kbd.ScanCodes::F1, state); break;
     case KEY_F2: kbd_do(kbd.ScanCodes::F2, state); break;
     case KEY_F3: kbd_do(kbd.ScanCodes::F3, state); break;
     case KEY_F4: kbd_do(kbd.ScanCodes::F4, state); break;
     case KEY_F5: kbd_do(kbd.ScanCodes::F5, state); break;
     case KEY_F6: kbd_do(kbd.ScanCodes::F6, state); break;
     case KEY_F7: kbd_do(kbd.ScanCodes::F7, state); break;
-    case KEY_F8: 
-      if (state) {
-        if (is_fn) {
-          kbd.keyboard_pausebreak();
-        } else {
-          kbd_do(kbd.ScanCodes::F8, state); 
-        }
-      } else {
-          kbd_do(kbd.ScanCodes::F8, false); 
-      }
-    break;
+    case KEY_F8: kbd_do(kbd.ScanCodes::F8, state); break;
     case KEY_F9: kbd_do(kbd.ScanCodes::F9, state); break;
     case KEY_F10: kbd_do(kbd.ScanCodes::F10, state); break;
     case KEY_F11: kbd_do(kbd.ScanCodes::F11, state); break;
