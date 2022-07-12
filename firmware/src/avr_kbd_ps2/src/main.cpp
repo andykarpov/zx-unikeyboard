@@ -24,7 +24,7 @@
 const uint8_t pins[] = {
   0xFF, IO1, IO2, IO3, IO4, IO5, IO6, IO7, IO8, IO9, IO10,
   IO11, IO12, IO13, IO14, IO15, IO16, IO17, IO18, IO19, IO20,
-  IO21, IO22, IO23, IO24, IO25, IO26, IO27
+  IO21, IO22, IO23, IO24, IO25, IO26
 };
 
 uint8_t keyaddr_mapped[COLS_MAX][ROWS_MAX]; // mapped keyaddr array by col/row indicies

@@ -97,14 +97,14 @@ const uint8_t keyaddr[][3] =
 { KEY_F6, 13, 16 },
 { KEY_F7, 5, 10 },
 { KEY_F8, 5, 11 },
-{ KEY_F9, 14, 27 },
+{ KEY_F9, 14, 3 },
 { KEY_F10, 8, 14 },
 { KEY_F11, 5, 8 },
 { KEY_F12, 8, 17 },
 { KEY_INSERT, 13, 17 },
 { KEY_HOME, 13, 14 },
-{ KEY_PGUP, 5, 27 },
-{ KEY_DELETE, 15, 27 },
+{ KEY_PGUP, 5, 3 },
+{ KEY_DELETE, 15, 3 },
 { KEY_END, 10, 17 },
 { KEY_PGDN, 6, 10 },
 { KEY_ACCENT, 17, 25 },
@@ -119,7 +119,7 @@ const uint8_t keyaddr[][3] =
 { KEY_9, 12, 14 },
 { KEY_0, 11, 14 },
 { KEY_MINUS, 11, 17 },
-{ KEY_EQUAL, 16, 27 },
+{ KEY_EQUAL, 16, 3 },
 { KEY_BACKSPACE, 6, 8 },
 { KEY_TAB, 5, 24 },
 { KEY_Q, 15, 25 },
@@ -169,8 +169,8 @@ const uint8_t keyaddr[][3] =
 { KEY_RALT, 2, 26 },
 { KEY_CONTEXTMENU, 8, 15 },
 { KEY_RCTRL, 4, 25 },
-{ KEY_LEFT, 6, 27 },
-{ KEY_RIGHT, 17, 27 },
+{ KEY_LEFT, 6, 3 },
+{ KEY_RIGHT, 17, 3 },
 { KEY_UP, 4, 8 },
 { KEY_DOWN, 6, 13 },
 };
@@ -185,6 +185,6 @@ const uint8_t cols[COLS_MAX] =
 
 const uint8_t rows[ROWS_MAX] = 
 {
-    1, 2, 7, 8, 9, 10, 11, 12, 13, 19, 20, 21, 22, 23, 24, 25, 27
+    1, 2, 7, 8, 9, 10, 11, 12, 13, 19, 20, 21, 22, 23, 24, 25, 3
 };
 
