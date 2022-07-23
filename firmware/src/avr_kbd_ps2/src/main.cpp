@@ -126,7 +126,7 @@ void kbd_event(uint8_t key, bool state)
     case KEY_LCTRL: kbd_do(kbd.ScanCodes::LEFT_CONTROL, state); break;
     case KEY_RSHIFT: kbd_do(kbd.ScanCodes::RIGHT_SHIFT, state); break;
     case KEY_RCTRL: kbd_do_special(kbd.SpecialScanCodes::RIGHT_CONTROL, state); break;
-    case KEY_RCTRL2: kbd_do_special(kbd.SpecialScanCodes::RIGHT_CONTROL, state); break;
+    case KEY_RCTRL2: kbd_do(kbd.ScanCodes::LEFT_SHIFT, state); break;
     case KEY_LALT: kbd_do(kbd.ScanCodes::LEFT_ALT, state); break;
     case KEY_RALT: kbd_do_special(kbd.SpecialScanCodes::RIGHT_ALT, state); break;
     case KEY_INSERT: 
@@ -191,7 +191,8 @@ void kbd_event(uint8_t key, bool state)
 //    case KEY_PRTSCR: if (state) { kbd.keyboard_press_printscreen(); } else { kbd.keyboard_release_printscreen(); } break;
 //    case KEY_PAUSE: kbd.keyboard_pausebreak(); break;
 //    case KEY_SCROLLLOCK: kbd_do(kbd.ScanCodes::SCROLL_LOCK, state); 
-    case KEY_CONTEXTMENU: kbd_do_special(kbd.SpecialScanCodes::MENUS, state); break;
+    //case KEY_CONTEXTMENU: kbd_do_special(kbd.SpecialScanCodes::MENUS, state); break;
+    case KEY_CONTEXTMENU: kbd_do_special(kbd.SpecialScanCodes::RIGHT_CONTROL, state); break;
     case KEY_GUI: kbd_do_special(kbd.SpecialScanCodes::LEFT_WIN, state); break;
 
     // F keys
