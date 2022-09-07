@@ -6,4 +6,4 @@ echo "Building AVR sources"
 
 pio run -t clean
 pio run
-cp .pio/build/ATmega32/firmware.hex ../../releases/zx_uni_ps2.hex
+cp .pio/build/ATmega32/firmware.hex ../../releases/avr_kbd_ps2.hex
