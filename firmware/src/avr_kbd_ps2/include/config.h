@@ -1,7 +1,7 @@
 #define DEBUG_MODE 0
 #define PRESSED true
 #define RELEASED false
-#define MATRIX_SIZE 84
+#define MATRIX_SIZE 85
 
 // Keyboard connector pins corresponding to MCU pins
 // Using pin naming from the https://github.com/MCUdude/MightyCore core
