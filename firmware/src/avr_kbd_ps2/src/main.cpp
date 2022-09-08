@@ -102,7 +102,7 @@ void kbd_event(uint8_t key, bool state)
 
     case KEY_PAGE_UP: 
       if (state) {
-        kbd_do_special(is_fn ? kbd.SpecialScanCodes::PAGE_UP : kbd.SpecialScanCodes::HOME, state); 
+        kbd_do_special(is_fn ? kbd.SpecialScanCodes::HOME : kbd.SpecialScanCodes::PAGE_UP, state); 
       } else {
         kbd_do_special(kbd.SpecialScanCodes::HOME, false);
         kbd_do_special(kbd.SpecialScanCodes::PAGE_UP, false);
@@ -111,14 +111,12 @@ void kbd_event(uint8_t key, bool state)
  
     case KEY_PAGE_DOWN: 
       if (state) {
-        kbd_do_special(is_fn ? kbd.SpecialScanCodes::PAGE_DOWN : kbd.SpecialScanCodes::END, state); 
+        kbd_do_special(is_fn ? kbd.SpecialScanCodes::END : kbd.SpecialScanCodes::PAGE_DOWN, state); 
       } else {
         kbd_do_special(kbd.SpecialScanCodes::END, false);
         kbd_do_special(kbd.SpecialScanCodes::PAGE_DOWN, false);
       }
     break;
-
-    // todo: FN keys (home, end, etc)
 
     // Letters & numbers
     case KEY_A: kbd_do(kbd.ScanCodes::A, state); break;
@@ -175,6 +173,7 @@ void kbd_event(uint8_t key, bool state)
     case KEY_PRTSCR: if (state) { kbd.keyboard_press_printscreen(); } else { kbd.keyboard_release_printscreen(); } break;
     case KEY_PAUSE: kbd.keyboard_pausebreak(); break;
     case KEY_CONTEXTMENU: kbd_do_special(kbd.SpecialScanCodes::MENUS, state); break;
+    case KEY_GUI: kbd_do_special(kbd.SpecialScanCodes::LEFT_WIN, state); break;
 
     // F keys
     case KEY_F1: kbd_do(kbd.ScanCodes::F1, state); break;
@@ -187,8 +186,22 @@ void kbd_event(uint8_t key, bool state)
     case KEY_F8: kbd_do(kbd.ScanCodes::F8, state); break;
     case KEY_F9: kbd_do(kbd.ScanCodes::F9, state); break;
     case KEY_F10: kbd_do(kbd.ScanCodes::F10, state); break;
-    case KEY_F11: kbd_do(kbd.ScanCodes::F11, state); break;
-    case KEY_F12: kbd_do(kbd.ScanCodes::F12, state); break;
+    case KEY_F11: 
+      if (state) {
+        kbd_do(is_fn ? kbd.ScanCodes::NUM_LOCK : kbd.ScanCodes::F11, state); 
+      } else {
+        kbd_do(kbd.ScanCodes::NUM_LOCK, false);
+        kbd_do(kbd.ScanCodes::F11, false); 
+      }
+    break;
+    case KEY_F12: 
+      if (state) {
+        kbd_do(is_fn ? kbd.ScanCodes::SCROLL_LOCK : kbd.ScanCodes::F12, state); 
+      } else {
+        kbd_do(kbd.ScanCodes::SCROLL_LOCK, false);
+        kbd_do(kbd.ScanCodes::F12, false); 
+      }
+    break;
   }
 }
 
