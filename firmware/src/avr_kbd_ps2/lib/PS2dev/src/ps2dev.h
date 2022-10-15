@@ -171,10 +171,12 @@ class PS2dev
 	private:
 		int _ps2clk;
 		int _ps2data;
+		int _scancodeset;
+		uint8_t translate_sc(uint8_t sc, bool pressed);
+		uint8_t translate_scsp(uint8_t sc, bool pressed);
 		void golo(int pin);
 		void gohi(int pin);
 		void ack();
 };
 
 #endif /* ps2dev_h */
-

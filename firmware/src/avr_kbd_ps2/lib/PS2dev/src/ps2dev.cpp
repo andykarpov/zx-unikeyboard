@@ -36,6 +36,7 @@ PS2dev::PS2dev(int clk, int data)
 {
   _ps2clk = clk;
   _ps2data = data;
+  _scancodeset = 2;
   gohi(_ps2clk);
   gohi(_ps2data);
 }
@@ -276,7 +277,16 @@ int PS2dev::keyboard_reply(unsigned char cmd, unsigned char *leds)
     break;
   case 0xF0: //set scan code set
     ack();
-    if(!read(&val)) ack(); //do nothing with the rate
+    if(!read(&val)) {
+      if (val > 0) {
+        // set scancode set
+        _scancodeset = val;
+      } else {
+        // get scancode set
+        write(_scancodeset);
+      }
+      ack(); 
+    }
     break;
   case 0xEE: //echo
     //ack();
@@ -308,23 +318,47 @@ int PS2dev::keyboard_handle(unsigned char *leds) {
 // Presses then releases one of the non-special characters
 int PS2dev::keyboard_mkbrk(unsigned char code)
 {
-  write(code);
-  write(0xF0);
-  write(code);
+  switch (_scancodeset) {
+    case 1:
+      write(translate_sc(code, 1));
+      write(translate_sc(code, 0));
+    break;
+    case 2:
+      write(code);
+      write(0xF0);
+      write(code);
+    break;
+  }
   return 0;
 }
 
 // Presses one of the non-special characters
 int PS2dev::keyboard_press(unsigned char code)
 {
-	return write(code);
+  switch (_scancodeset) {
+    case 1:
+      return write(translate_sc(code, 1));
+    break;
+    case 2:
+    	return write(code);
+    break;
+    default:
+      return 0;
+  }
 }
 
 // Releases one of the non-special characters
 int PS2dev::keyboard_release(unsigned char code)
 {
-	write(0xf0);
-	write(code);
+  switch (_scancodeset) {
+    case 1:
+      write(translate_sc(code, 0));
+    break;
+    case 2:
+      write(0xf0);
+      write(code);
+    break;
+  }
 
 	return 0;
 }
@@ -332,8 +366,16 @@ int PS2dev::keyboard_release(unsigned char code)
 // Presses one of the special characters
 int PS2dev::keyboard_press_special(unsigned char code)
 {
-	write(0xe0);
-	write(code);
+  switch (_scancodeset) {
+    case 1:
+      write(0xe0);
+      write(translate_scsp(code, 1));
+    break;
+    case 2:
+      write(0xe0);
+      write(code);
+    break;
+  }
 
 	return 0;
 }
@@ -341,9 +383,17 @@ int PS2dev::keyboard_press_special(unsigned char code)
 // Releases one of the special characters
 int PS2dev::keyboard_release_special(unsigned char code)
 {
-	write(0xe0);
-	write(0xf0);
-	write(code);
+  switch (_scancodeset) {
+    case 1:
+      write(0xe0);
+      write(translate_scsp(code, 0));
+    break;
+    case 2:
+      write(0xe0);
+      write(0xf0);
+      write(code);
+    break;
+  }
 
 	return 0;
 }
@@ -351,11 +401,21 @@ int PS2dev::keyboard_release_special(unsigned char code)
 // Presses then releases one of the special characters
 int PS2dev::keyboard_special_mkbrk(unsigned char code)
 {
-	write(0xe0);
-	write(code);
-	write(0xe0);
-	write(0xf0);
-	write(code);
+  switch (_scancodeset) {
+    case 1:
+      write(0xe0);
+      write(translate_scsp(code, 1));
+      write(0xe0);
+      write(translate_scsp(code, 0));
+    break;
+    case 2:
+      write(0xe0);
+      write(code);
+      write(0xe0);
+      write(0xf0);
+      write(code);
+    break;
+  }
 
 	return 0;
 }
@@ -363,10 +423,23 @@ int PS2dev::keyboard_special_mkbrk(unsigned char code)
 // Presses Printscreen
 int PS2dev::keyboard_press_printscreen()
 {
-	write(0xe0);
-	write(0x12);
-	write(0xe0);
-	write(0x7c);
+  //E0 2A E0 37/E0 B7 E0 AA
+  switch (_scancodeset) {
+    case 1:
+      // E0 2A E0 37
+      write(0xe0);
+      write(0x2a);
+      write(0xe0);
+      write(0x37);
+    break;
+    case 2:
+      // E0 12 E0 7C
+      write(0xe0);
+      write(0x12);
+      write(0xe0);
+      write(0x7c);
+    break;
+  }
 
 	return 0;
 }
@@ -374,12 +447,24 @@ int PS2dev::keyboard_press_printscreen()
 // Releases Printscreen
 int PS2dev::keyboard_release_printscreen()
 {
-	write(0xe0);
-	write(0xf0);
-	write(0x7c);
-	write(0xe0);
-	write(0xf0);
-	write(0x12);
+  switch (_scancodeset) {
+    case 1:
+      // E0 B7 E0 AA
+      write(0xe0);
+      write(0xb7);
+      write(0xe0);
+      write(0xaa);
+    break;
+    case 2:
+      // /E0 F0 7C E0 F0 12
+      write(0xe0);
+      write(0xf0);
+      write(0x7c);
+      write(0xe0);
+      write(0xf0);
+      write(0x12);
+    break;
+  }
 
 	return 0;
 }
@@ -396,14 +481,143 @@ int PS2dev::keyboard_mkbrk_printscreen()
 // Presses/Releases Pause/Break
 int PS2dev::keyboard_pausebreak()
 {
-	write(0xe1);
-	write(0x14);
-	write(0x77);
-	write(0xe1);
-	write(0xf0);
-	write(0x14);
-	write(0xe0);
-	write(0x77);
+  switch (_scancodeset) {
+    case 1:
+      // E1 1D 45 / E1 9D C5
+      write(0xe1);
+      write(0x1d);
+      write(0x45);
+      write(0xe1);
+      write(0x9d);
+      write(0xc5);
+    break;
+    case 2:
+      // E1 14 77 E1 / F0 14 F0 77
+      write(0xe1);
+      write(0x14);
+      write(0x77);
+      write(0xe1);
+      write(0xf0);
+      write(0x14);
+      write(0xe0);
+      write(0x77);
+    break;
+  }
 
 	return 0;
+}
+
+uint8_t PS2dev::translate_sc(uint8_t sc, bool pressed) {
+  uint8_t v = 0;
+  switch(sc) {
+    case 0x1: v = 0x43; break;
+    case 0x3: v = 0x3f; break;
+    case 0x4: v = 0x3d; break;
+    case 0x5: v = 0x3b; break;
+    case 0x6: v = 0x3c; break;
+    case 0x7: v = 0x58; break;
+    case 0x9: v = 0x44; break;
+    case 0xa: v = 0x42; break;
+    case 0xb: v = 0x40; break;
+    case 0xc: v = 0x3e; break;
+    case 0xd: v = 0xf; break;
+    case 0xe: v = 0x29; break;
+    case 0x11: v = 0x38; break;
+    case 0x12: v = 0x2a; break;
+    case 0x14: v = 0x1d; break;
+    case 0x15: v = 0x10; break;
+    case 0x16: v = 0x2; break;
+    case 0x1a: v = 0x2c; break;
+    case 0x1b: v = 0x1f; break;
+    case 0x1c: v = 0x1e; break;
+    case 0x1d: v = 0x11; break;
+    case 0x1e: v = 0x3; break;
+    case 0x21: v = 0x2e; break;
+    case 0x22: v = 0x2d; break;
+    case 0x23: v = 0x20; break;
+    case 0x24: v = 0x12; break;
+    case 0x25: v = 0x5; break;
+    case 0x26: v = 0x4; break;
+    case 0x29: v = 0x39; break;
+    case 0x2a: v = 0x2f; break;
+    case 0x2b: v = 0x21; break;
+    case 0x2c: v = 0x14; break;
+    case 0x2d: v = 0x13; break;
+    case 0x2e: v = 0x6; break;
+    case 0x31: v = 0x31; break;
+    case 0x32: v = 0x30; break;
+    case 0x33: v = 0x23; break;
+    case 0x34: v = 0x22; break;
+    case 0x35: v = 0x15; break;
+    case 0x36: v = 0x7; break;
+    case 0x3a: v = 0x32; break;
+    case 0x3b: v = 0x24; break;
+    case 0x3c: v = 0x16; break;
+    case 0x3d: v = 0x8; break;
+    case 0x3e: v = 0x9; break;
+    case 0x41: v = 0x33; break;
+    case 0x42: v = 0x25; break;
+    case 0x43: v = 0x17; break;
+    case 0x44: v = 0x18; break;
+    case 0x45: v = 0xb; break;
+    case 0x46: v = 0xa; break;
+    case 0x49: v = 0x34; break;
+    case 0x4a: v = 0x35; break;
+    case 0x4b: v = 0x26; break;
+    case 0x4c: v = 0x27; break;
+    case 0x4d: v = 0x19; break;
+    case 0x4e: v = 0xc; break;
+    case 0x52: v = 0x28; break;
+    case 0x54: v = 0x1a; break;
+    case 0x55: v = 0xd; break;
+    case 0x58: v = 0x3a; break;
+    case 0x59: v = 0x36; break;
+    case 0x5a: v = 0x1c; break;
+    case 0x5b: v = 0x1b; break;
+    case 0x5d: v = 0x2b; break;
+    case 0x66: v = 0xe; break;
+    case 0x69: v = 0x4f; break;
+    case 0x6b: v = 0x4b; break;
+    case 0x6c: v = 0x47; break;
+    case 0x70: v = 0x52; break;
+    case 0x71: v = 0x53; break;
+    case 0x72: v = 0x50; break;
+    case 0x73: v = 0x4c; break;
+    case 0x74: v = 0x4d; break;
+    case 0x75: v = 0x48; break;
+    case 0x76: v = 0x1; break;
+    case 0x77: v = 0x45; break;
+    case 0x78: v = 0x57; break;
+    case 0x79: v = 0x4e; break;
+    case 0x7a: v = 0x51; break;
+    case 0x7b: v = 0x4a; break;
+    case 0x7c: v = 0x37; break;
+    case 0x7d: v = 0x49; break;
+    case 0x7e: v = 0x46; break;
+    case 0x83: v = 0x41; break;
+    default: v = 0;
+  }
+  return pressed ? v : v + 0x80;
+}
+
+uint8_t PS2dev::translate_scsp(uint8_t sc, bool pressed) {
+  uint8_t v = 0;
+  switch(sc) {
+    case 0x11: v = 0x38; break;
+    case 0x14: v = 0x1d; break;
+    case 0x4a: v = 0x35; break;
+    case 0x5a: v = 0x1c; break;
+    case 0x69: v = 0x4f; break;
+    case 0x6b: v = 0x4b; break;
+    case 0x6c: v = 0x47; break;
+    case 0x70: v = 0x52; break;
+    case 0x71: v = 0x53; break;
+    case 0x72: v = 0x50; break;
+    case 0x74: v = 0x4d; break;
+    case 0x75: v = 0x48; break;
+    case 0x7a: v = 0x51; break;
+    case 0x7d: v = 0x49; break;
+    default: v = 0;
+  }
+  return pressed ? v : v + 0x80;
 }
