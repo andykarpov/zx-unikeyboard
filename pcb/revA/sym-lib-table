@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "zx-unikeyboard-ps2-rescue")(type "KiCad")(uri "${KIPRJMOD}/zx-unikeyboard-ps2-rescue.kicad_sym")(options "")(descr ""))
+)
