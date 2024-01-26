@@ -49,9 +49,7 @@
         }
       },
       "diff_pair_dimensions": [],
-      "drc_exclusions": [
-        "starved_thermal|134366000|61074000|6934e438-7f2f-4c45-9c4e-c6acf6fc045f|c7980e2f-3a1c-40e0-96c0-9de1e8527929|F.Cu"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "filename": "board_design_settings.json",
         "version": 2
